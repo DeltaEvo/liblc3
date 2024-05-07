@@ -70,6 +70,27 @@ jobs:
         name: liblc3.wasm
         path: bin/liblc3.wasm
 
+  deploy-pages:
+    runs-on: ubuntu-latest
+    needs: build-wasm
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+    - uses: actions/checkout@v4
+    - run: rm web/liblc3.wasm
+    - uses: actions/download-artifact@v4
+      with:
+        name: liblc3.wasm
+        path: web
+    - uses: actions/upload-pages-artifact@v3
+      with:
+        path: web
+    - uses: actions/deploy-pages@v4
+
   test-linux:
     runs-on: ubuntu-latest
     steps:

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>liblc3</title>
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Roboto&display=block"
+  rel="stylesheet"
+/>
+
+<style>
+  @font-face {
+    font-family: "7segment";
+    src: url("https://torinak.com/font/7segment.woff") format("woff2");
+  }
+
+  :root {
+    --primary: #8b5cf6;
+    --secondary: #4c1d95;
+    --red: #ef4444;
+  }
+
+  body {
+    margin: 0;
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: #f5f3ff;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #27272a;
+  }
+
+  header {
+    background-color: var(--primary);
+    background-image: url("note.svg");
+    padding: 2.5rem 0;
+  }
+
+  header a {
+    color: inherit;
+  }
+
+  header h1 {
+    font-size: 52px;
+    margin: 0;
+  }
+
+  header h1 a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  pre {
+    overflow-x: auto;
+  }
+
+  main .inner,
+  header .inner {
+    padding: 16px 8px;
+    margin: 0 auto;
+    width: 940px;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  header .inner {
+    display: flex;
+  }
+
+  main a {
+    color: var(--primary);
+  }
+
+  main a:visited {
+    color: var(--primary);
+  }
+
+  main .inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  main lc3-audio {
+    overflow-x: auto;
+    max-width: 100%;
+  }
+</style>
+
+<header>
+  <div class="inner">
+    <div class="details">
+      <h1><a href="">liblc3</a></h1>
+      <h2>Open-Source Low Complexity Communication Codec (LC3) library</h2>
+    </div>
+    <a href="https://github.com/google/liblc3">
+      <span>View project on</span>
+      Github
+    </a>
+  </div>
+</header>
+
+<main>
+  <div class="inner">
+    <input type="file" id="file" accept="audio/*">
+    <lc3-audio id="audio"></lc3-audio>
+    <div id="readme"></div>
+  </div>
+</main>
+
+<script type="importmap">
+  {
+    "imports": {
+      "marked": "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js"
+    }
+  }
+</script>
+<script type="module">
+  import { marked } from "marked";
+  document.getElementById("readme").innerHTML = marked.parse(
+    await fetch(
+      "https://raw.githubusercontent.com/google/liblc3/main/README.md"
+    ).then((res) => res.text())
+  );
+
+  const audio = document.getElementById("audio")
+  document.getElementById("file").addEventListener("change", (event) => {
+    audio.src = URL.createObjectURL(event.target.files[0])
+  })
+</script>
+<script type="module" src="./lc3-audio.js"></script>
